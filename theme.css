@@ -8,29 +8,36 @@ name: Neon Amber Glass
 id: neon-amber-glass
 settings:
   - id: nag-glass
-    title: Glas & Transparenz
+    title: "Glass & transparency"
+    title.de: Glas & Transparenz
     type: heading
     level: 1
     collapsed: false
   - id: nag-transparency
-    title: Hintergrund-Transparenz
-    description: '0 = blickdicht, 100 = vollständig transparente Flächen. Text bleibt deckend. Echte Desktop-Durchsicht benötigt ein transparent gestartetes Obsidian-Fenster.'
+    title: "Background transparency"
+    title.de: Hintergrund-Transparenz
+    description: "0 = opaque, 100 = fully transparent surfaces. Text stays opaque. True desktop transparency requires Obsidian to create a transparent window."
+    description.de: '0 = blickdicht, 100 = vollständig transparente Flächen. Text bleibt deckend. Echte Desktop-Durchsicht benötigt ein transparent gestartetes Obsidian-Fenster.'
     type: variable-number-slider
     default: 55
     min: 0
     max: 100
     step: 1
   - id: nag-reading-shade
-    title: Zusätzliche Abdunklung der Notiz
-    description: 'Verstärkt die vorhandene Abdunklung der Notiz. Bei Transparenz 100 bleibt auch die Notiz vollständig durchsichtig.'
+    title: "Extra note shading"
+    title.de: Zusätzliche Abdunklung der Notiz
+    description: "Adds shading in proportion to the remaining note opacity. At transparency 100, the note is fully transparent too."
+    description.de: 'Verstärkt die vorhandene Abdunklung der Notiz. Bei Transparenz 100 bleibt auch die Notiz vollständig durchsichtig.'
     type: variable-number-slider
     default: 8
     min: 0
     max: 40
     step: 1
   - id: nag-blur
-    title: Blur hinter Popups
-    description: 'Weichzeichnung der Notiz hinter Menüs, Suchfenstern und Popups. Für den Desktop-Blur bitte Fensterglas verwenden; macOS bietet dort keinen stufenlosen Pixel-Regler.'
+    title: "Blur behind popups"
+    title.de: Blur hinter Popups
+    description: "Blurs the note behind menus, search dialogs and popups. Use Window glass for desktop blur; macOS does not expose a continuous pixel-radius control."
+    description.de: 'Weichzeichnung der Notiz hinter Menüs, Suchfenstern und Popups. Für den Desktop-Blur bitte Fensterglas verwenden; macOS bietet dort keinen stufenlosen Pixel-Regler.'
     type: variable-number-slider
     default: 24
     min: 0
@@ -38,95 +45,115 @@ settings:
     step: 1
     format: px
   - id: nag-tint
-    title: Glas-Tönung
+    title: "Glass tint"
+    title.de: Glas-Tönung
     type: variable-color
     format: hex
     default: '#284b60'
   - id: nag-tint-strength
-    title: Stärke der Tönung
-    description: '0 = neutral, 100 = volle Farbsättigung. Die Helligkeit des dunklen Glases bleibt konstant; Durchsicht regelt Hintergrund-Transparenz.'
+    title: "Tint strength"
+    title.de: Stärke der Tönung
+    description: "0 = neutral, 100 = full color saturation. The dark glass keeps the same perceptual lightness; Background transparency controls its opacity."
+    description.de: '0 = neutral, 100 = volle Farbsättigung. Die Helligkeit des dunklen Glases bleibt konstant; Durchsicht regelt Hintergrund-Transparenz.'
     type: variable-number-slider
     default: 30
     min: 0
     max: 100
     step: 1
   - id: nag-native-material
-    title: Fensterglas
-    description: 'Echte macOS-Durchsicht. Benötigt Neon Amber Glass Companion und den lokalen Transparenzfix. Klar zeigt den Desktop scharf; die matten Varianten verwenden native Weichzeichnung.'
+    title: "Window glass"
+    title.de: Fensterglas
+    description: "Requires Neon Amber Glass Companion and an Obsidian window created with native transparency enabled. Clear shows a sharp desktop; dark HUD glass uses native blur."
+    description.de: "Benötigt Neon Amber Glass Companion und ein mit nativer Transparenz gestartetes Obsidian-Fenster. Klar zeigt den Desktop scharf; dunkles HUD-Glas verwendet native Weichzeichnung."
     type: variable-select
-    default: under-window
+    default: hud
     options:
-      - label: Klar · kein Desktop-Blur
+      - label: "Clear / Klar"
         value: clear
-      - label: Matt · Desktop-Blur
-        value: under-window
-      - label: Matt · dunkles HUD-Glas
+      - label: "Dark HUD glass / Dunkles HUD-Glas"
         value: hud
   - id: nag-solid
-    title: Blickdichter Lesemodus
-    description: 'Übersteuert die Transparenz und schaltet Blur aus. Die Glas-Regler bleiben gespeichert.'
+    title: "Opaque reading mode"
+    title.de: Blickdichter Lesemodus
+    description: "Overrides transparency and disables blur. Your glass settings stay saved."
+    description.de: 'Übersteuert die Transparenz und schaltet Blur aus. Die Glas-Regler bleiben gespeichert.'
     type: class-toggle
     default: false
     addCommand: true
   - id: nag-neon
-    title: Neon & Farben
+    title: "Neon & colors"
+    title.de: Neon & Farben
     type: heading
     level: 1
     collapsed: false
   - id: nag-glow
-    title: Neon-Glow
-    description: '0 = kein Glow, 1 = kräftig, 1.7 = Retro-Terminal, 3 = maximale Leuchtröhre. Fließtext bleibt immer ohne Glow.'
+    title: "Neon glow"
+    title.de: Neon-Glow
+    description: "0 = no glow, 1 = strong, 1.7 = retro terminal, 3 = maximum neon tube. Body text never glows."
+    description.de: '0 = kein Glow, 1 = kräftig, 1.7 = Retro-Terminal, 3 = maximale Leuchtröhre. Fließtext bleibt immer ohne Glow.'
     type: variable-number-slider
     default: 1.7
     min: 0
     max: 3
     step: 0.1
   - id: nag-nav-by-level
-    title: Navigation nach Ebene färben
-    description: 'Alle Dateien und Ordner gleicher Tiefe erhalten dieselbe Farbe. Ebene 1 Orange, Ebene 2 Grün, Ebene 3 Hellblau; danach wiederholt sich die Folge. Ausgeschaltet wechseln die Farben pro Eintrag.'
+    title: "Color navigation by depth"
+    title.de: Navigation nach Ebene färben
+    description: "Files and folders at the same depth share a color. Level 1 is orange, level 2 green, level 3 ice blue; then the sequence repeats. Turn this off to alternate colors by entry."
+    description.de: 'Alle Dateien und Ordner gleicher Tiefe erhalten dieselbe Farbe. Ebene 1 Orange, Ebene 2 Grün, Ebene 3 Hellblau; danach wiederholt sich die Folge. Ausgeschaltet wechseln die Farben pro Eintrag.'
     type: class-toggle
     default: true
     addCommand: true
   - id: nag-yellow
-    title: Sanftes Gelb für Lesetext
+    title: "Soft yellow reading text"
+    title.de: Sanftes Gelb für Lesetext
     type: variable-color
     format: hex
     default: '#eadba8'
   - id: nag-orange
-    title: Neon-Orange
+    title: "Neon orange"
+    title.de: Neon-Orange
     type: variable-color
     format: hex
     default: '#ff9b45'
   - id: nag-green
-    title: Phosphor-Grün
+    title: "Phosphor green"
+    title.de: Phosphor-Grün
     type: variable-color
     format: hex
     default: '#8dffb0'
   - id: nag-blue
-    title: Eis-Hellblau
+    title: "Ice blue"
+    title.de: Eis-Hellblau
     type: variable-color
     format: hex
     default: '#83dfff'
   - id: nag-scanlines
-    title: Dezente statische Scanlines
-    description: 'Optionaler CRT-Hauch ohne Flackern oder Animation.'
+    title: "Subtle static scanlines"
+    title.de: Dezente statische Scanlines
+    description: "An optional CRT touch without flicker or animation."
+    description.de: 'Optionaler CRT-Hauch ohne Flackern oder Animation.'
     type: class-toggle
     default: false
   - id: nag-type
-    title: Lesbarkeit
+    title: "Readability"
+    title.de: Lesbarkeit
     type: heading
     level: 1
     collapsed: true
   - id: nag-line-height
-    title: Zeilenhöhe
+    title: "Line height"
+    title.de: Zeilenhöhe
     type: variable-number-slider
     default: 1.75
     min: 1.35
     max: 2.1
     step: 0.05
   - id: nag-line-width
-    title: Maximale Textbreite
-    description: 'Gilt, wenn Lesbare Zeilenlänge in den Editor-Einstellungen aktiv ist.'
+    title: "Maximum text width"
+    title.de: Maximale Textbreite
+    description: "Applies when Readable line length is enabled in the editor settings."
+    description.de: 'Gilt, wenn Lesbare Zeilenlänge in den Editor-Einstellungen aktiv ist.'
     type: variable-number-slider
     default: 760
     min: 500
@@ -142,7 +169,7 @@ body {
   --nag-effective-blur: var(--nag-blur);
   --nag-tint: #284b60;
   --nag-tint-strength: 30;
-  --nag-native-material: under-window;
+  --nag-native-material: hud;
   --nag-glow: 1.7;
   --nag-yellow: #eadba8;
   --nag-orange: #ff9b45;

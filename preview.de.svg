@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 1024 576" role="img" aria-labelledby="title desc">
+  <title id="title">Vorschau des Themes Neon Amber Glass</title>
+  <desc id="desc">Illustrierte Vorschau mit dunkel getönter Arbeitsfläche, gelbem Lesetext, leuchtenden Überschriften in Orange, Grün und Hellblau sowie nach Tiefe gefärbter Navigation.</desc>
+  <defs>
+    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#17242d"/><stop offset="1" stop-color="#10181f"/></linearGradient>
+    <filter id="glow" x="-25%" y="-100%" width="150%" height="300%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="small-glow" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="2.8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1024" height="576" rx="18" fill="url(#glass)"/>
+  <g stroke="#83dfff" stroke-opacity=".15" fill="none"><path d="M240 0V576M0 48H1024M240 92H1024"/><rect x="251" y="8" width="258" height="39" rx="9"/></g>
+  <rect x="252" y="45" width="255" height="2" fill="#ff9b45"/>
+  <g font-family="Monaco,Menlo,Consolas,monospace" font-size="15">
+    <text x="31" y="31" fill="#eadba8">NEON GARTEN</text>
+    <text x="270" y="33" fill="#ff9b45" filter="url(#small-glow)">Neon Amber Glass</text>
+    <text x="275" y="77" fill="#83dfff">Notizen / Neon Amber Glass</text>
+    <g filter="url(#small-glow)">
+      <g fill="#ff9b45"><text x="30" y="118">› Projekte</text><text x="30" y="151">⌄ Notizen</text><text x="30" y="386">› Archiv</text></g>
+      <g fill="#8dffb0"><text x="47" y="186">⌄ Studio</text><text x="47" y="322">Ideen</text><text x="47" y="354">Tagesnotizen</text></g>
+      <g fill="#83dfff"><text x="65" y="220">Neon Amber Glass</text><text x="65" y="253">Designnotizen</text><text x="65" y="286">Ruhiger Fokus</text></g>
+    </g>
+    <path d="M42 166V365M60 201V303" stroke="#83dfff" stroke-opacity=".22"/>
+    <rect x="20" y="200" width="204" height="30" rx="7" fill="#ff9b45" fill-opacity=".08"/>
+    <text x="27" y="550" fill="#93a69e" font-size="12">Farben nach Ebene</text>
+    <text x="288" y="549" fill="#93a69e" font-size="12">Warmer Text · getöntes Glas · klarer Fokus</text>
+    <text x="288" y="147" font-size="30" font-weight="600" fill="#ff9b45" filter="url(#glow)">Neon Amber Glass</text>
+    <g fill="#eadba8" font-size="15"><text x="288" y="192">Ein ruhiger Ort zum Lesen, Denken und Gestalten.</text><text x="288" y="219">Warmgelber Text bleibt klar, während Akzente leuchten.</text></g>
+    <text x="288" y="272" font-size="23" fill="#8dffb0" filter="url(#glow)">Phosphor-Garten</text>
+    <g fill="#eadba8"><text x="302" y="308">Eine kleine Idee für morgen</text><text x="302" y="337">Ein freier Tisch und ein freier Kopf</text></g>
+    <g fill="#ff9b45"><circle cx="289" cy="304" r="2.5"/><circle cx="289" cy="333" r="2.5"/></g>
+    <text x="288" y="391" font-size="21" fill="#83dfff" filter="url(#glow)">Eis-Kanal</text>
+    <rect x="285" y="416" width="653" height="87" rx="11" fill="#83dfff" fill-opacity=".045" stroke="#83dfff" stroke-opacity=".19"/>
+    <text x="309" y="448" fill="#83dfff">Dein Glas, deine Einstellungen</text>
+    <text x="309" y="477" fill="#eadba8" font-size="14">Transparenz · Tönung · Glow · klares oder dunkles HUD-Glas</text>
+  </g>
+</svg>
