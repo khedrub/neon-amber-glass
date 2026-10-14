@@ -44,7 +44,7 @@ Es werden nur lokale Schriften verwendet: Monaco, Menlo, JetBrains Mono, Consola
 
 ## Glas und native Transparenz
 
-Die CSS-Transparenz gilt für Hintergrundflächen, nicht für das gesamte Fenster. Native Desktop-Durchsicht benötigt eine unterstützte Desktop-Plattform und ein mit Transparenz gestartetes Fenster. Aktiviere auf macOS Obsidians Einstellung **Durchscheinendes Fenster**.
+Die CSS-Transparenz gilt für Hintergrundflächen, nicht für das gesamte Fenster. Native Desktop-Durchsicht benötigt eine unterstützte Desktop-Plattform und ein mit Transparenz gestartetes Fenster. Aktiviere auf macOS Obsidians Einstellung **Transparenzeffekt** (englisch: **Translucent window**).
 
 Der optionale [Neon Amber Glass Companion](https://github.com/khedrub/neon-amber-glass-companion) wählt klares oder dunkles HUD-Fenstermaterial auf macOS. Der entsprechende Style-Settings-Regler heißt **Fensterglas**.
 
