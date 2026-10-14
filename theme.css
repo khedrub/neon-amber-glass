@@ -1,0 +1,638 @@
+/* Neon Amber Glass — a warm, readable terminal behind tinted glass.
+ * Local fonts only. No network requests, flashing or window-opacity hacks.
+ * Style Settings is optional; these defaults work without the plugin.
+ */
+
+/* @settings
+name: Neon Amber Glass
+id: neon-amber-glass
+settings:
+  - id: nag-glass
+    title: Glas & Transparenz
+    type: heading
+    level: 1
+    collapsed: false
+  - id: nag-transparency
+    title: Hintergrund-Transparenz
+    description: '0 = blickdicht, 100 = vollständig transparente Flächen. Text bleibt deckend. Echte Desktop-Durchsicht benötigt ein transparent gestartetes Obsidian-Fenster.'
+    type: variable-number-slider
+    default: 55
+    min: 0
+    max: 100
+    step: 1
+  - id: nag-reading-shade
+    title: Zusätzliche Abdunklung der Notiz
+    description: 'Verstärkt die vorhandene Abdunklung der Notiz. Bei Transparenz 100 bleibt auch die Notiz vollständig durchsichtig.'
+    type: variable-number-slider
+    default: 8
+    min: 0
+    max: 40
+    step: 1
+  - id: nag-blur
+    title: Blur hinter Popups
+    description: 'Weichzeichnung der Notiz hinter Menüs, Suchfenstern und Popups. Für den Desktop-Blur bitte Fensterglas verwenden; macOS bietet dort keinen stufenlosen Pixel-Regler.'
+    type: variable-number-slider
+    default: 24
+    min: 0
+    max: 48
+    step: 1
+    format: px
+  - id: nag-tint
+    title: Glas-Tönung
+    type: variable-color
+    format: hex
+    default: '#284b60'
+  - id: nag-tint-strength
+    title: Stärke der Tönung
+    description: '0 = neutral, 100 = volle Farbsättigung. Die Helligkeit des dunklen Glases bleibt konstant; Durchsicht regelt Hintergrund-Transparenz.'
+    type: variable-number-slider
+    default: 30
+    min: 0
+    max: 100
+    step: 1
+  - id: nag-native-material
+    title: Fensterglas
+    description: 'Echte macOS-Durchsicht. Benötigt Neon Amber Glass Companion und den lokalen Transparenzfix. Klar zeigt den Desktop scharf; die matten Varianten verwenden native Weichzeichnung.'
+    type: variable-select
+    default: under-window
+    options:
+      - label: Klar · kein Desktop-Blur
+        value: clear
+      - label: Matt · Desktop-Blur
+        value: under-window
+      - label: Matt · dunkles HUD-Glas
+        value: hud
+  - id: nag-solid
+    title: Blickdichter Lesemodus
+    description: 'Übersteuert die Transparenz und schaltet Blur aus. Die Glas-Regler bleiben gespeichert.'
+    type: class-toggle
+    default: false
+    addCommand: true
+  - id: nag-neon
+    title: Neon & Farben
+    type: heading
+    level: 1
+    collapsed: false
+  - id: nag-glow
+    title: Neon-Glow
+    description: '0 = kein Glow, 1 = kräftig, 1.7 = Retro-Terminal, 3 = maximale Leuchtröhre. Fließtext bleibt immer ohne Glow.'
+    type: variable-number-slider
+    default: 1.7
+    min: 0
+    max: 3
+    step: 0.1
+  - id: nag-nav-by-level
+    title: Navigation nach Ebene färben
+    description: 'Alle Dateien und Ordner gleicher Tiefe erhalten dieselbe Farbe. Ebene 1 Orange, Ebene 2 Grün, Ebene 3 Hellblau; danach wiederholt sich die Folge. Ausgeschaltet wechseln die Farben pro Eintrag.'
+    type: class-toggle
+    default: true
+    addCommand: true
+  - id: nag-yellow
+    title: Sanftes Gelb für Lesetext
+    type: variable-color
+    format: hex
+    default: '#eadba8'
+  - id: nag-orange
+    title: Neon-Orange
+    type: variable-color
+    format: hex
+    default: '#ff9b45'
+  - id: nag-green
+    title: Phosphor-Grün
+    type: variable-color
+    format: hex
+    default: '#8dffb0'
+  - id: nag-blue
+    title: Eis-Hellblau
+    type: variable-color
+    format: hex
+    default: '#83dfff'
+  - id: nag-scanlines
+    title: Dezente statische Scanlines
+    description: 'Optionaler CRT-Hauch ohne Flackern oder Animation.'
+    type: class-toggle
+    default: false
+  - id: nag-type
+    title: Lesbarkeit
+    type: heading
+    level: 1
+    collapsed: true
+  - id: nag-line-height
+    title: Zeilenhöhe
+    type: variable-number-slider
+    default: 1.75
+    min: 1.35
+    max: 2.1
+    step: 0.05
+  - id: nag-line-width
+    title: Maximale Textbreite
+    description: 'Gilt, wenn Lesbare Zeilenlänge in den Editor-Einstellungen aktiv ist.'
+    type: variable-number-slider
+    default: 760
+    min: 500
+    max: 1100
+    step: 10
+    format: px
+*/
+
+body {
+  --nag-transparency: 55;
+  --nag-reading-shade: 8;
+  --nag-blur: 24px;
+  --nag-effective-blur: var(--nag-blur);
+  --nag-tint: #284b60;
+  --nag-tint-strength: 30;
+  --nag-native-material: under-window;
+  --nag-glow: 1.7;
+  --nag-yellow: #eadba8;
+  --nag-orange: #ff9b45;
+  --nag-green: #8dffb0;
+  --nag-blue: #83dfff;
+  --nag-line-height: 1.75;
+  --nag-line-width: 760px;
+  --nag-terminal-font: 'Monaco', 'Menlo', 'JetBrains Mono', 'Consolas', monospace;
+  --font-text-theme: var(--nag-terminal-font);
+  --font-monospace-theme: var(--nag-terminal-font);
+  --font-interface-theme: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --file-line-width: var(--nag-line-width);
+  --line-height-normal: var(--nag-line-height);
+}
+
+/* This is intentionally a dark theme, also when the OS uses light mode. */
+body.theme-dark,
+body.theme-light {
+  color-scheme: dark;
+  /* Constant OKLCH lightness; tint strength changes chroma, not brightness. */
+  --nag-surface: oklch(from var(--nag-tint) 0.2 calc(c * var(--nag-tint-strength) / 100) h);
+  --nag-opacity: calc(100% - var(--nag-transparency) * 1%);
+  --nag-note-opacity: min(100%, calc(var(--nag-opacity) * (1 + var(--nag-reading-shade) / 100)));
+  --nag-glass: color-mix(in srgb, var(--nag-surface) var(--nag-opacity), transparent);
+  --nag-note-glass: color-mix(in srgb, var(--nag-surface) var(--nag-note-opacity), transparent);
+  --nag-float: color-mix(in srgb, var(--nag-surface) 95%, transparent);
+  --nag-border: color-mix(in srgb, var(--nag-blue) 18%, transparent);
+  --nag-glow-color: var(--nag-orange);
+  --nag-shadow: 0 0 calc(2px * var(--nag-glow)) color-mix(in srgb, currentColor 90%, transparent),
+    0 0 calc(9px * var(--nag-glow)) color-mix(in srgb, currentColor 65%, transparent),
+    0 0 calc(22px * var(--nag-glow)) color-mix(in srgb, currentColor 34%, transparent);
+  --color-base-00: #0a1016;
+  --color-base-05: #0f171e;
+  --color-base-10: #131d24;
+  --color-base-20: #1c2930;
+  --color-base-25: #24333a;
+  --color-base-30: #30434a;
+  --color-base-35: #40565d;
+  --color-base-40: #5d777a;
+  --color-base-50: #8c9f99;
+  --color-base-60: #acb8a4;
+  --color-base-70: #c7c9ac;
+  --color-base-100: var(--nag-yellow);
+  --mono-rgb-0: 0, 0, 0;
+  --mono-rgb-100: 255, 255, 255;
+  --mono-0: #000;
+  --mono-100: #fff;
+  --background-primary: var(--nag-note-glass);
+  --background-primary-alt: var(--nag-glass);
+  --background-secondary: var(--nag-glass);
+  --background-secondary-alt: var(--nag-glass);
+  --background-modifier-border: var(--nag-border);
+  --background-modifier-border-hover: color-mix(in srgb, var(--nag-blue) 40%, transparent);
+  --background-modifier-border-focus: var(--nag-blue);
+  --background-modifier-hover: color-mix(in srgb, var(--nag-blue) 9%, transparent);
+  --background-modifier-active-hover: color-mix(in srgb, var(--nag-orange) 14%, transparent);
+  --background-modifier-form-field: color-mix(in srgb, #080b10 65%, transparent);
+  --background-modifier-cover: #030609a8;
+  --background-modifier-box-shadow: #0008;
+  --background-modifier-error: #623130;
+  --background-modifier-error-hover: #79403a;
+  --background-modifier-success: #254937;
+  --text-normal: var(--nag-yellow);
+  --text-muted: color-mix(in srgb, var(--nag-yellow) 77%, #72868c);
+  --text-faint: #93a69e;
+  --text-on-accent: #10150e;
+  --text-on-accent-inverted: #10150e;
+  --text-error: #ff8a80;
+  --text-success: var(--nag-green);
+  --text-warning: var(--nag-orange);
+  --text-accent: var(--nag-blue);
+  --text-accent-hover: var(--nag-green);
+  --text-selection: color-mix(in srgb, var(--nag-blue) 24%, transparent);
+  --text-highlight-bg: #d9ae3b35;
+  --interactive-normal: #1c2b32;
+  --interactive-hover: #2b3d45;
+  --interactive-accent: var(--nag-green);
+  --interactive-accent-hover: color-mix(in srgb, var(--nag-green) 84%, white);
+  --interactive-accent-hsl: 138, 100%, 78%;
+  --color-accent: var(--nag-green);
+  --color-accent-1: var(--nag-green);
+  --color-accent-2: var(--nag-blue);
+  --color-orange: var(--nag-orange);
+  --color-green: var(--nag-green);
+  --color-cyan: var(--nag-blue);
+  --color-blue: var(--nag-blue);
+  --color-yellow: var(--nag-yellow);
+  --color-red: #ff8a80;
+  --color-purple: #cbb5ff;
+  --color-pink: #ffabd3;
+  --h1-color: var(--nag-orange);
+  --h2-color: var(--nag-green);
+  --h3-color: var(--nag-blue);
+  --h4-color: var(--nag-orange);
+  --h5-color: var(--nag-green);
+  --h6-color: var(--nag-blue);
+  --h1-font: var(--nag-terminal-font);
+  --h2-font: var(--nag-terminal-font);
+  --h3-font: var(--nag-terminal-font);
+  --h4-font: var(--nag-terminal-font);
+  --h5-font: var(--nag-terminal-font);
+  --h6-font: var(--nag-terminal-font);
+  --h1-size: 1.85em;
+  --h2-size: 1.5em;
+  --h3-size: 1.28em;
+  --h4-size: 1.16em;
+  --h5-size: 1.07em;
+  --h6-size: 1em;
+  --h1-weight: 600;
+  --h2-weight: 600;
+  --h3-weight: 600;
+  --h4-weight: 600;
+  --h5-weight: 600;
+  --h6-weight: 600;
+  --inline-title-color: var(--nag-orange);
+  --inline-title-font: var(--nag-terminal-font);
+  --inline-title-size: 2em;
+  --inline-title-weight: 600;
+  --inline-title-line-height: 1.4;
+  --inline-title-margin-bottom: 1.25em;
+  --bold-color: #f6e8bc;
+  --italic-color: #d6c697;
+  --link-color: var(--nag-blue);
+  --link-color-hover: var(--nag-green);
+  --link-external-color: var(--nag-blue);
+  --link-unresolved-color: var(--nag-orange);
+  --link-unresolved-opacity: 0.85;
+  --code-normal: var(--nag-green);
+  --code-background: #05090d66;
+  --code-comment: #98aab0;
+  --code-function: var(--nag-blue);
+  --code-important: var(--nag-orange);
+  --code-keyword: var(--nag-orange);
+  --code-operator: var(--nag-yellow);
+  --code-property: var(--nag-blue);
+  --code-punctuation: #c1c9bd;
+  --code-string: var(--nag-green);
+  --code-tag: var(--nag-orange);
+  --code-value: var(--nag-blue);
+  --tag-color: var(--nag-green);
+  --tag-background: #8dffb012;
+  --tag-background-hover: #8dffb023;
+  --tag-radius: 6px;
+  --blockquote-border-color: var(--nag-blue);
+  --blockquote-background-color: #83dfff08;
+  --checkbox-color: var(--nag-green);
+  --checkbox-color-hover: var(--nag-blue);
+  --checkbox-marker-color: #09170f;
+  --checklist-done-color: var(--text-muted);
+  --list-marker-color: var(--nag-orange);
+  --hr-color: var(--nag-border);
+  --table-border-color: var(--nag-border);
+  --table-header-background: #83dfff0d;
+  --table-header-color: var(--nag-blue);
+  --nav-item-color: var(--nag-blue);
+  --nav-item-color-active: var(--nag-orange);
+  --nav-item-color-hover: var(--nag-green);
+  --nav-item-background-active: #ff9b4518;
+  --nav-item-background-hover: #83dfff0c;
+  --nav-item-weight-active: 600;
+  --nav-indentation-guide-color: #83dfff24;
+  --nav-collapse-icon-color: var(--text-muted);
+  --tab-text-color: var(--nag-blue);
+  --tab-text-color-focused: var(--nag-blue);
+  --tab-text-color-active: var(--nag-orange);
+  --tab-text-color-focused-active: var(--nag-orange);
+  --tab-text-color-focused-active-current: var(--nag-orange);
+  --tab-background-active: #83dfff08;
+  --tab-outline-color: var(--nag-border);
+  --titlebar-background: var(--nag-glass);
+  --titlebar-background-focused: var(--nag-glass);
+  --titlebar-text-color: var(--text-muted);
+  --titlebar-text-color-focused: var(--nag-orange);
+  --ribbon-background: transparent;
+  --ribbon-background-collapsed: var(--nag-glass);
+  --status-bar-background: var(--nag-glass);
+  --status-bar-border-color: var(--nag-border);
+  --divider-color: var(--nag-border);
+  --icon-color: #aec1b8;
+  --icon-color-hover: var(--nag-blue);
+  --icon-color-active: var(--nag-green);
+  --icon-color-focused: var(--nag-orange);
+  --graph-node: var(--nag-green);
+  --graph-node-focused: var(--nag-orange);
+  --graph-node-tag: var(--nag-blue);
+  --graph-line: #83dfff40;
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
+  --radius-xl: 20px;
+  --input-radius: 8px;
+  --modal-radius: 18px;
+  --scrollbar-bg: transparent;
+  --scrollbar-thumb-bg: #83dfff25;
+  --scrollbar-active-thumb-bg: #83dfff50;
+  background-color: var(--nag-surface);
+}
+
+/* One glass layer per panel: do not stack semi-opaque editor wrappers. */
+body .app-container,
+body .horizontal-main-container,
+body .workspace,
+body .workspace-split,
+body .workspace-tabs,
+body .workspace-leaf,
+body .workspace-leaf-content,
+body .workspace-split.mod-root .view-content,
+body .workspace-split.mod-left-split .view-content,
+body .workspace-split.mod-right-split .view-content,
+body .markdown-source-view,
+body .markdown-source-view .cm-editor,
+body .markdown-source-view .cm-scroller,
+body .markdown-preview-view,
+body .workspace-leaf-content.is-read-mode .markdown-preview-view,
+body .view-header {
+  background-color: transparent;
+}
+
+body.is-translucent {
+  --workspace-background-translucent: transparent;
+  background-color: transparent;
+}
+
+body .workspace-split.mod-root,
+body .workspace-split.mod-left-split,
+body .workspace-split.mod-right-split {
+  background: linear-gradient(155deg, color-mix(in srgb, white calc(var(--nag-opacity) * 0.05), transparent), transparent 45%),
+    linear-gradient(var(--nag-glass), var(--nag-glass));
+  box-shadow: inset 0 1px 0 #ffffff0d;
+}
+
+body .workspace-split.mod-root {
+  background: linear-gradient(155deg, color-mix(in srgb, white calc(var(--nag-note-opacity) * 0.04), transparent), transparent 40%),
+    linear-gradient(var(--nag-note-glass), var(--nag-note-glass));
+  border-inline: 1px solid var(--nag-border);
+}
+
+/* Native translucency forces background-color to transparent. The flat
+ * gradient paints the single tinted layer without overriding core priority. */
+
+body .workspace-tab-header-container {
+  background: transparent;
+  border-bottom: 1px solid var(--nag-border);
+}
+
+body .view-header {
+  border-bottom: 1px solid #83dfff0b;
+}
+
+body .workspace-tab-header.is-active {
+  box-shadow: inset 0 -2px 0 var(--nag-orange);
+}
+
+body .workspace-tab-header-inner-title {
+  --nag-glow-color: var(--nag-blue);
+  font-family: var(--nag-terminal-font);
+}
+
+body .workspace-tab-header.is-active .workspace-tab-header-inner-title {
+  --nag-glow-color: var(--nag-orange);
+  color: var(--nag-orange);
+}
+
+/* Alternating phosphor colors in each folder, independent of note names. */
+body .nav-files-container .tree-item:nth-child(3n + 1) > .tree-item-self {
+  --nag-glow-color: var(--nag-orange);
+}
+body .nav-files-container .tree-item:nth-child(3n + 2) > .tree-item-self {
+  --nag-glow-color: var(--nag-green);
+}
+body .nav-files-container .tree-item:nth-child(3n) > .tree-item-self {
+  --nag-glow-color: var(--nag-blue);
+}
+
+/* Two distinct wrapper variables pass the depth down the tree without a
+ * self-referencing custom-property cycle. This works at arbitrary depth. */
+body:is(.nag-nav-by-level, :not(.css-settings-manager)) .nav-files-container {
+  --nag-parent-depth: 0;
+}
+body:is(.nag-nav-by-level, :not(.css-settings-manager)) .nav-files-container .tree-item {
+  --nag-tree-depth: calc(var(--nag-parent-depth) + 1);
+}
+body:is(.nag-nav-by-level, :not(.css-settings-manager)) .nav-files-container .tree-item-children {
+  --nag-parent-depth: var(--nag-tree-depth);
+}
+body:is(.nag-nav-by-level, :not(.css-settings-manager)) .nav-files-container .nav-folder.mod-root {
+  --nag-tree-depth: 0;
+}
+body:is(.nag-nav-by-level, :not(.css-settings-manager)) .nav-files-container .tree-item > .tree-item-self {
+  --nag-level-index: mod(calc(var(--nag-tree-depth) - 1), 3);
+  --nag-level-orange: clamp(0%, calc(100% * (1 - var(--nag-level-index))), 100%);
+  --nag-level-green: clamp(0%, calc(100% * (2 - var(--nag-level-index))), 100%);
+  --nag-glow-color: color-mix(in srgb,
+    var(--nag-orange) var(--nag-level-orange),
+    color-mix(in srgb, var(--nag-green) var(--nag-level-green), var(--nag-blue)));
+}
+body .nav-files-container :is(.nav-file-title, .nav-folder-title) {
+  color: var(--nag-glow-color);
+  font-family: var(--nag-terminal-font);
+  border-radius: 7px;
+  padding-block: 5px;
+}
+body .nav-files-container :is(.nav-file-title-content, .nav-folder-title-content) {
+  /* Render after ellipsis clipping, so halos never become hard rectangles. */
+  text-shadow: none;
+  filter: drop-shadow(0 0 calc(3px * var(--nag-glow)) color-mix(in srgb, currentColor 65%, transparent))
+    drop-shadow(0 0 calc(7px * var(--nag-glow)) color-mix(in srgb, currentColor 30%, transparent));
+}
+body .nav-files-container .nav-file-title.is-active {
+  background-color: var(--nav-item-background-active);
+  box-shadow: inset 2px 0 0 var(--nag-glow-color);
+}
+
+/* Apply a single shadow to the whole heading line to avoid doubled halos
+ * on CodeMirror's nested tokens, markdown links, and emphasis. */
+body :is(.markdown-rendered h1, .HyperMD-header-1) { --nag-glow-color: var(--nag-orange); }
+body :is(.markdown-rendered h2, .HyperMD-header-2) { --nag-glow-color: var(--nag-green); }
+body :is(.markdown-rendered h3, .HyperMD-header-3) { --nag-glow-color: var(--nag-blue); }
+body :is(.markdown-rendered h4, .HyperMD-header-4) { --nag-glow-color: var(--nag-orange); }
+body :is(.markdown-rendered h5, .HyperMD-header-5) { --nag-glow-color: var(--nag-green); }
+body :is(.markdown-rendered h6, .HyperMD-header-6) { --nag-glow-color: var(--nag-blue); }
+
+body :is(.markdown-rendered h1, .markdown-rendered h2, .markdown-rendered h3,
+  .markdown-rendered h4, .markdown-rendered h5, .markdown-rendered h6,
+  .HyperMD-header, .inline-title) {
+  text-shadow: var(--nag-shadow);
+  letter-spacing: 0.015em;
+}
+
+body .inline-title {
+  --nag-glow-color: var(--nag-orange);
+}
+
+body .view-header-title,
+body.is-focused .workspace-leaf.mod-active .view-header-title {
+  --nag-glow-color: var(--nag-blue);
+  color: var(--nag-blue);
+}
+
+body .workspace-tab-header-inner-title,
+body .view-header-title {
+  text-shadow: none;
+  filter: drop-shadow(0 0 calc(3px * var(--nag-glow)) color-mix(in srgb, currentColor 65%, transparent))
+    drop-shadow(0 0 calc(7px * var(--nag-glow)) color-mix(in srgb, currentColor 30%, transparent));
+}
+
+body .markdown-rendered :is(h1, h2, h3, h4, h5, h6) :is(a, strong, em),
+body .HyperMD-header :is(.cm-hmd-internal-link, .cm-link, .cm-strong, .cm-em) {
+  color: inherit;
+}
+
+body .cm-s-obsidian .cm-formatting-header {
+  color: color-mix(in srgb, var(--nag-glow-color) 65%, #60717d);
+}
+
+body .markdown-rendered pre,
+body .cm-s-obsidian .HyperMD-codeblock {
+  border-radius: 6px;
+}
+body .markdown-rendered pre {
+  border: 1px solid var(--nag-border);
+  box-shadow: inset 0 1px 0 #ffffff08;
+}
+body .markdown-rendered blockquote {
+  border-radius: 0 9px 9px 0;
+  padding-block: 0.5em;
+}
+body .callout {
+  border-radius: 12px;
+  border: 1px solid rgba(var(--callout-color), 0.24);
+  background-color: rgba(var(--callout-color), 0.07);
+}
+body .callout[data-callout='info'],
+body .callout[data-callout='note'] { --callout-color: 131, 223, 255; }
+body .callout[data-callout='tip'],
+body .callout[data-callout='success'] { --callout-color: 141, 255, 176; }
+body .callout[data-callout='warning'] { --callout-color: 255, 155, 69; }
+
+/* Floating controls stay nearly opaque even at maximum transparency. */
+body .modal,
+body .menu,
+body .suggestion-container,
+body .popover,
+body .prompt {
+  background: linear-gradient(150deg, #ffffff07, transparent 50%), var(--nag-float);
+  -webkit-backdrop-filter: blur(var(--nag-effective-blur));
+  backdrop-filter: blur(var(--nag-effective-blur));
+  border: 1px solid var(--nag-border);
+  box-shadow: 0 18px 60px #0007, inset 0 1px 0 #ffffff10;
+}
+body .modal-sidebar,
+body .modal-content {
+  background-color: transparent;
+}
+body .tooltip,
+body .notice {
+  background-color: #14212b;
+  color: var(--nag-yellow);
+  border: 1px solid var(--nag-border);
+}
+body :is(button, input, textarea, select, .dropdown):focus-visible,
+body .clickable-icon:focus-visible {
+  outline: 2px solid var(--nag-blue);
+  outline-offset: 3px;
+}
+body input[type='range'] {
+  accent-color: var(--nag-green);
+}
+body input[type='range']::-webkit-slider-thumb {
+  box-shadow: 0 0 10px #8dffb066;
+}
+
+/* Style Settings 1.0.9 shares --pcr-color on the section container. Bind each
+ * swatch to its own live theme variable, including saved custom colors. Keep
+ * Pickr's internal palette/temporary preview untouched while editing. */
+body .setting-item[data-id='nag-tint'] .pcr-button::after {
+  background-color: var(--nag-tint);
+}
+body .setting-item[data-id='nag-yellow'] .pcr-button::after {
+  background-color: var(--nag-yellow);
+}
+body .setting-item[data-id='nag-orange'] .pcr-button::after {
+  background-color: var(--nag-orange);
+}
+body .setting-item[data-id='nag-green'] .pcr-button::after {
+  background-color: var(--nag-green);
+}
+body .setting-item[data-id='nag-blue'] .pcr-button::after {
+  background-color: var(--nag-blue);
+}
+
+body.nag-scanlines .workspace { position: relative; }
+body.nag-scanlines .workspace::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, #00000012 3px 4px);
+}
+
+body.nag-solid {
+  --nag-opacity: 100%;
+  --nag-note-opacity: 100%;
+  --nag-effective-blur: 0px;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body {
+    --nag-opacity: 100%;
+    --nag-note-opacity: 100%;
+  }
+  body.is-translucent { background-color: var(--nag-surface); }
+  body .workspace-split.mod-root,
+  body .workspace-split.mod-left-split,
+  body .workspace-split.mod-right-split {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media print {
+  body.theme-dark,
+  body.theme-light {
+    color-scheme: light;
+    --text-normal: #202020;
+    --text-muted: #444;
+    --bold-color: #111;
+    --italic-color: #333;
+    --h1-color: #202020;
+    --h2-color: #202020;
+    --h3-color: #202020;
+    --h4-color: #202020;
+    --h5-color: #202020;
+    --h6-color: #202020;
+    --inline-title-color: #202020;
+    --background-primary: white;
+    --background-secondary: white;
+    --link-color: #174f73;
+    --link-external-color: #174f73;
+    --code-normal: #202020;
+    --code-background: #f3f3f3;
+    --table-header-color: #202020;
+    --table-header-background: #f3f3f3;
+    --table-border-color: #ccc;
+    --nag-shadow: none;
+    background: white;
+  }
+  body .markdown-rendered { background: white; }
+  body .view-header-title { filter: none; }
+  body.nag-scanlines .workspace::after { display: none; }
+  body .callout { background: #f3f3f3; border-color: #ccc; }
+}
